@@ -3,34 +3,38 @@ import { useEffect } from 'react';
 import { useTelegram } from '@hooks/useTelegram';
 import { useUserStore } from '@store/userStore';
 
-// Pages (placeholder for now)
-function HomePage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold mb-2 text-tg-text">Kiyim Do'koni</h1>
-        <p className="text-tg-hint">Mini App tez orada ishga tushadi...</p>
-      </div>
-    </div>
-  );
-}
+// Pages
+import HomePage from '@pages/Home';
+import CartPage from '@pages/Cart';
+import ProfilePage from '@pages/Profile';
 
 function App() {
-  const { user, setTelegramUser } = useTelegram();
-  const { setTelegramUser: setAppTelegramUser } = useUserStore();
+  const { user, isReady } = useTelegram();
+  const { setTelegramUser } = useUserStore();
 
   useEffect(() => {
-    if (user) {
+    if (user && isReady) {
       setTelegramUser(user);
-      setAppTelegramUser(user);
     }
-  }, [user, setTelegramUser, setAppTelegramUser]);
+  }, [user, isReady, setTelegramUser]);
+
+  if (!isReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-tg-bg">
+        <div className="text-center">
+          <div className="w-10 h-10 border-4 border-tg-button border-t-tg-button/30 rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-tg-hint">Yuklanmoqda...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-tg-bg text-tg-text">
       <Routes>
         <Route path="/" element={<HomePage />} />
-        {/* Other routes will be added in TASK-003 */}
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </div>
   );
