@@ -1,4 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
+import { api } from './client';
 
 // Query client configuration
 export const queryClient = new QueryClient({
@@ -23,6 +24,9 @@ export const queryClient = new QueryClient({
     },
   },
 });
+
+// Re-export api for convenience
+export { api };
 
 // Query keys factory
 export const queryKeys = {
