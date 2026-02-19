@@ -128,11 +128,56 @@ docker-compose up -d
 
 ## 📞 Telegram Bot Sozlash
 
-1. **@BotFather** ga kiring
-2. `/newbot` - Yangi bot yaratish
-3. `/newapp` - Mini App yaratish
-4. Web App URL ni Vercel linkiga o'zgartirish
-5. `/setmenubutton` - Menu button sozlash
+### Tezkor sozlash (Windows)
+
+```bash
+setup-telegram.bat
+```
+
+### Tezkor sozlash (Linux/Mac)
+
+```bash
+chmod +x setup-telegram.sh
+./setup-telegram.sh
+```
+
+### Batafsil qo'llanma
+
+[TELEGRAM_SETUP.md](TELEGRAM_SETUP.md) faylida to'liq yo'riqnoma mavjud.
+
+#### 1. Telegram bot yaratish
+
+1. **@BotFather** ga kiring: https://t.me/botfather
+2. `/newbot` buyrug'ini yuboring
+3. Bot nomini kiriting (masalan: `Kiyim Do'koni`)
+4. Bot username kiriting (`yourshop_bot`)
+5. Token oling va `backend/.env` ga qo'shing:
+   ```env
+   TELEGRAM_BOT_TOKEN=123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
+   ```
+
+#### 2. HTTPS Tunnel (ngrok)
+
+```bash
+# ngrok o'rnatish
+npm install -g ngrok
+
+# Frontend uchun tunnel
+ngrok http 5173
+```
+
+Natijada `https://xxxx.ngrok.io` URL olasiz.
+
+#### 3. Mini App yaratish
+
+1. @BotFather da `/newapp`
+2. Botni tanlang
+3. ngrok URL ni kiriting
+4. Short name kiriting (`shop`)
+
+**Natija:** `https://t.me/yourshop_bot/shop`
+
+---
 
 ## 🧪 Test Qilish
 
