@@ -7,10 +7,13 @@ import { useUserStore } from './store/userStore';
 import HomePage from './pages/Home';
 import CartPage from './pages/Cart';
 import ProfilePage from './pages/Profile';
+import ProductDetail from './pages/ProductDetail/ProductDetail';
 
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminProductForm from './pages/admin/AdminProductForm';
 
 function App() {
   const { user, isReady } = useTelegram();
@@ -38,12 +41,16 @@ function App() {
       <Routes>
         {/* Client Routes */}
         <Route path="/" element={<HomePage />} />
+        <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/products" element={<AdminProducts />} />
+        <Route path="/admin/products/add" element={<AdminProductForm />} />
+        <Route path="/admin/products/edit/:id" element={<AdminProductForm />} />
       </Routes>
     </div>
   );

@@ -380,21 +380,27 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
     // Update sizes if provided
     if (sizes) {
       await prisma.productSize.deleteMany({ where: { productId: product.id } });
-      await prisma.productSize.createMany({
-        data: sizes.map((size: string) => ({ productId: product.id, size })),
-      });
+      await Promise.all(
+        sizes.map((size: string) =>
+          prisma.productSize.create({ data: { productId: product.id, size } })
+        )
+      );
     }
 
     // Update colors if provided
     if (colors) {
       await prisma.productColor.deleteMany({ where: { productId: product.id } });
-      await prisma.productColor.createMany({
-        data: colors.map((color: { name: string; hexCode: string }) => ({
-          productId: product.id,
-          name: color.name,
-          hexCode: color.hexCode,
-        })),
-      });
+      await Promise.all(
+        colors.map((color: { name: string; hexCode: string }) =>
+          prisma.productColor.create({
+            data: {
+              productId: product.id,
+              name: color.name,
+              hexCode: color.hexCode,
+            },
+          })
+        )
+      );
     }
 
     const updatedProduct = await prisma.product.findUnique({
