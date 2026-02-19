@@ -7,6 +7,15 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// Import routes
+import adminRoutes from '@routes/adminRoutes';
+import categoryRoutes from '@routes/categoryRoutes';
+import productRoutes from '@routes/productRoutes';
+import orderRoutes from '@routes/orderRoutes';
+import commentRoutes from '@routes/commentRoutes';
+import userRoutes from '@routes/userRoutes';
+import dashboardRoutes from '@routes/dashboardRoutes';
+
 // Load environment variables
 dotenv.config();
 
@@ -65,12 +74,14 @@ app.get('/api/health', (req: Request, res: Response) => {
   });
 });
 
-// API Routes (will be added in TASK-002)
-// app.use('/api/products', productRoutes);
-// app.use('/api/categories', categoryRoutes);
-// app.use('/api/orders', orderRoutes);
-// app.use('/api/comments', commentRoutes);
-// app.use('/api/admin', adminRoutes);
+// API Routes
+app.use('/api/admin', adminRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api', productRoutes);
+app.use('/api', orderRoutes);
+app.use('/api', commentRoutes);
+app.use('/api', userRoutes);
+app.use('/api/admin/dashboard', dashboardRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
