@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Product, CartItem } from '@types/index';
-import { useTelegram } from '@hooks/useTelegram';
+import type { Product, CartItem } from '../types/index';
+import { useTelegram } from '../hooks/useTelegram';
 
 interface CartStore {
   items: CartItem[];
@@ -28,7 +28,8 @@ export const useCartStore = create<CartStore>()(
       totalAmount: 0,
 
       addItem: (product, size, color, quantity = 1) => {
-        const { hapticImpact } = useTelegram.getState();
+        const telegram = useTelegram();
+        const hapticImpact = telegram.hapticImpact;
         
         set((state) => {
           const existingItemIndex = state.items.findIndex(
@@ -64,7 +65,8 @@ export const useCartStore = create<CartStore>()(
       },
 
       removeItem: (productId, size, color) => {
-        const { hapticImpact } = useTelegram.getState();
+        const telegram = useTelegram();
+        const hapticImpact = telegram.hapticImpact;
         
         set((state) => ({
           items: state.items.filter(
@@ -101,7 +103,8 @@ export const useCartStore = create<CartStore>()(
       },
 
       incrementQuantity: (productId, size, color) => {
-        const { hapticImpact } = useTelegram.getState();
+        const telegram = useTelegram();
+        const hapticImpact = telegram.hapticImpact;
         
         set((state) => ({
           items: state.items.map((item) =>
@@ -118,7 +121,8 @@ export const useCartStore = create<CartStore>()(
       },
 
       decrementQuantity: (productId, size, color) => {
-        const { hapticImpact } = useTelegram.getState();
+        const telegram = useTelegram();
+        const hapticImpact = telegram.hapticImpact;
         
         set((state) => {
           const item = state.items.find(

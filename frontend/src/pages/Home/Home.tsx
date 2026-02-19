@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { api, queryKeys } from '@api/queryClient';
-import Layout from '@components/Layout';
-import BottomNav from '@components/BottomNav';
-import ProductCard from '@components/ProductCard';
-import Loading from '@components/Loading';
-import type { Category } from '@types/index';
+import { api, queryKeys } from '../../api/queryClient';
+import Layout from '../../components/Layout';
+import BottomNav from '../../components/BottomNav';
+import ProductCard from '../../components/ProductCard';
+import Loading from '../../components/Loading';
+import type { Category } from '../../types/index';
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);

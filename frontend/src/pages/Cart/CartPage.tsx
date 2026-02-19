@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '@store/cartStore';
-import { useTelegram } from '@hooks/useTelegram';
-import Layout from '@components/Layout';
-import BottomNav from '@components/BottomNav';
-import MainButton from '@components/MainButton';
-import { formatPrice } from '@utils/format';
+import { useCart } from '../../store/cartStore';
+import { useTelegram } from '../../hooks/useTelegram';
+import Layout from '../../components/Layout';
+import BottomNav from '../../components/BottomNav';
+import MainButton from '../../components/MainButton';
+import { formatPrice } from '../../utils/format';
+import type { CartItem } from '../../types/index';
 
 export default function CartPage() {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ export default function CartPage() {
 
       {/* Cart Items */}
       <main className="p-4 space-y-3">
-        {items.map((item) => (
+        {items.map((item: CartItem) => (
           <div
             key={`${item.product.id}-${item.size || ''}-${item.color || ''}`}
             className="flex gap-3 bg-tg-secondary-bg rounded-xl p-3"

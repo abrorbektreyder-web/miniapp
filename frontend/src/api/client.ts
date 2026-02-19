@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
-import type { ApiResponse, ApiError, PaginatedResponse } from '@types/index';
+import type { ApiResponse, ApiError, PaginatedResponse } from '../types/index';
 
 // API URL from environment
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import type { TelegramWebApp, WebAppUser, ThemeParams } from '@types/telegram';
+import type { TelegramWebApp, WebAppUser, ThemeParams } from '../types/telegram';
 
 interface UseTelegramReturn {
   webApp: TelegramWebApp | null;

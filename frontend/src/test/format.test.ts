@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatPrice, formatDate, formatRelativeTime, truncateText, generateSlug } from '@utils/format';
+import { formatPrice, formatDate, formatRelativeTime, truncateText, generateSlug } from '../utils/format';
 
 describe('formatPrice', () => {
   it('should format price correctly', () => {

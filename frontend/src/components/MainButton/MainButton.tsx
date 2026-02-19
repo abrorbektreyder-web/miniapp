@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { useTelegram } from '@hooks/useTelegram';
+import { useTelegram } from '../../hooks/useTelegram';
 
 interface MainButtonProps {
   text: string;

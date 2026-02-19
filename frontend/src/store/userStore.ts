@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import type { WebAppUser } from '@types/telegram';
-import type { User } from '@types/index';
+import type { WebAppUser } from '../types/telegram';
+import type { User } from '../types/index';
 
 interface UserStore {
   telegramUser: WebAppUser | null;

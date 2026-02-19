@@ -1,8 +1,8 @@
-import { useUser } from '@store/userStore';
-import { useTelegram } from '@hooks/useTelegram';
-import Layout from '@components/Layout';
-import BottomNav from '@components/BottomNav';
-import { getInitials } from '@utils/format';
+import { useUser } from '../../store/userStore';
+import { useTelegram } from '../../hooks/useTelegram';
+import Layout from '../../components/Layout';
+import BottomNav from '../../components/BottomNav';
+import { getInitials } from '../../utils/format';
 
 export default function ProfilePage() {
   const { telegramUser } = useUser();

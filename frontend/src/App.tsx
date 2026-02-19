@@ -1,16 +1,16 @@
 import { Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useTelegram } from '@hooks/useTelegram';
-import { useUserStore } from '@store/userStore';
+import { useTelegram } from './hooks/useTelegram';
+import { useUserStore } from './store/userStore';
 
 // Pages
-import HomePage from '@pages/Home';
-import CartPage from '@pages/Cart';
-import ProfilePage from '@pages/Profile';
+import HomePage from './pages/Home';
+import CartPage from './pages/Cart';
+import ProfilePage from './pages/Profile';
 
 // Admin Pages
-import AdminLogin from '@pages/admin/AdminLogin';
-import AdminDashboard from '@pages/admin/AdminDashboard';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard';
 
 function App() {
   const { user, isReady } = useTelegram();

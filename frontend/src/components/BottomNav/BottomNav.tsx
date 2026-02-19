@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { useCart } from '@store/cartStore';
+import { useCart } from '../../store/cartStore';
 
 export default function BottomNav() {
   const { itemCount } = useCart();

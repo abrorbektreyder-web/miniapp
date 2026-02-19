@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import type { Product } from '@types/index';
-import { formatPrice } from '@utils/format';
+import type { Product } from '../../types/index';
+import { formatPrice } from '../../utils/format';
 
 interface ProductCardProps {
   product: Product & {
