@@ -1,8 +1,17 @@
 import { Request, Response } from 'express';
-import { PrismaClient, OrderStatus } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 
 const prisma = new PrismaClient();
+
+// Order status constants (SQLite uchun)
+const OrderStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  SHIPPED: 'SHIPPED',
+  DELIVERED: 'DELIVERED',
+  CANCELLED: 'CANCELLED',
+} as const;
 
 /**
  * Create order
@@ -401,7 +410,8 @@ export const updateOrderStatus = async (req: Request, res: Response): Promise<vo
     const { id } = req.params;
     const { status } = req.body;
 
-    if (!status || !Object.values(OrderStatus).includes(status as OrderStatus)) {
+    const validStatuses = Object.values(OrderStatus);
+    if (!status || !validStatuses.includes(status as string)) {
       res.status(400).json({
         success: false,
         error: {
@@ -414,7 +424,7 @@ export const updateOrderStatus = async (req: Request, res: Response): Promise<vo
 
     const order = await prisma.order.update({
       where: { id: parseInt(id, 10) },
-      data: { status: status as OrderStatus },
+      data: { status: status as string },
       include: {
         user: true,
         items: {
