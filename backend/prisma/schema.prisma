@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -113,7 +113,7 @@ model Order {
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   items       OrderItem[]
   totalAmount Int
-  status      OrderStatus @default(PENDING)
+  status      String      @default("PENDING")
   comment     String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -135,14 +135,6 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
-}
-
-enum OrderStatus {
-  PENDING
-  CONFIRMED
-  SHIPPED
-  DELIVERED
-  CANCELLED
 }
 
 model Admin {

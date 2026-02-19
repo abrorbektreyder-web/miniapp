@@ -3,9 +3,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 interface AdminLayoutProps {
   children: ReactNode;
+  title?: string;
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default function AdminLayout({ children, title }: AdminLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -16,12 +17,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { path: '/admin/orders', label: 'Buyurtmalar', icon: '🛒' },
     { path: '/admin/comments', label: 'Izohlar', icon: '💬' },
     { path: '/admin/categories', label: 'Kategoriyalar', icon: '🏷️' },
-    { path: '/admin/settings', label: 'Sozlamalar', icon: '⚙️' },
   ];
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
     navigate('/admin/login');
+  };
+
+  const isActive = (path: string) => {
+    if (path === '/admin/dashboard') {
+      return location.pathname === path;
+    }
+    return location.pathname.startsWith(path);
   };
 
   return (
@@ -36,13 +43,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 lg:translate-x-0 ${
+        className={`fixed top-0 left-0 z-50 h-full w-64 bg-white shadow-xl transform transition-transform duration-300 lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between h-16 px-4 border-b">
-          <h1 className="text-xl font-bold text-gray-800">Admin Panel</h1>
+        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+          <Link to="/admin/dashboard" className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">A</span>
+            </div>
+            <span className="font-bold text-gray-800">Admin</span>
+          </Link>
           <button
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden text-gray-500 hover:text-gray-700"
@@ -54,14 +66,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
 
         {/* Menu */}
-        <nav className="p-4 space-y-2">
+        <nav className="p-4 space-y-1 overflow-y-auto">
           {menuItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                location.pathname === item.path
-                  ? 'bg-blue-500 text-white'
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                isActive(item.path)
+                  ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
@@ -72,42 +84,55 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </nav>
 
         {/* Logout */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-colors"
           >
-            <span className="text-xl">🚪</span>
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
             <span className="font-medium">Chiqish</span>
           </button>
         </div>
       </aside>
 
       {/* Main content */}
-      <div className="lg:ml-64">
+      <div className="lg:ml-64 min-h-screen flex flex-col">
         {/* Top bar */}
-        <header className="flex items-center justify-between h-16 px-4 bg-white shadow-sm">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="lg:hidden text-gray-500 hover:text-gray-700"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+        <header className="sticky top-0 z-30 h-16 bg-white border-b border-gray-200 shadow-sm">
+          <div className="flex items-center justify-between h-full px-4">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="lg:hidden text-gray-500 hover:text-gray-700"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              
+              {title && (
+                <h1 className="text-xl font-bold text-gray-800">{title}</h1>
+              )}
+            </div>
 
-          <div className="flex items-center gap-4 ml-auto">
-            <Link
-              to="/"
-              className="text-blue-500 hover:text-blue-600 text-sm font-medium"
-            >
-              Saytga o'tish →
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link
+                to="/"
+                className="hidden sm:flex items-center gap-2 text-blue-500 hover:text-blue-600 text-sm font-medium transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                Saytga o'tish
+              </Link>
+            </div>
           </div>
         </header>
 
         {/* Page content */}
-        <main className="p-6">
+        <main className="flex-1 p-6">
           {children}
         </main>
       </div>

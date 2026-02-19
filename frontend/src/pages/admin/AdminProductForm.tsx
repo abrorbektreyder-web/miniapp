@@ -79,6 +79,21 @@ export default function AdminProductForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation
+    if (!formData.name.trim()) {
+      alert('Mahsulot nomini kiriting');
+      return;
+    }
+    if (!formData.price || Number(formData.price) <= 0) {
+      alert('Narxni to\'g\'ri kiriting');
+      return;
+    }
+    if (!formData.categoryId) {
+      alert('Kategoriyani tanlang');
+      return;
+    }
+
     mutation.mutate();
   };
 
@@ -115,76 +130,71 @@ export default function AdminProductForm() {
   };
 
   return (
-    <AdminLayout>
+    <AdminLayout title={isEdit ? 'Mahsulotni tahrirlash' : 'Yangi mahsulot qo\'shish'}>
       <div className="max-w-4xl">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">
-            {isEdit ? 'Mahsulotni tahrirlash' : 'Yangi mahsulot qo\'shish'}
-          </h1>
-          <p className="text-gray-500 mt-1">
-            {isEdit ? 'Mahsulot ma\'lumotlarini o\'zgartiring' : 'Yangi mahsulot qo\'shing'}
-          </p>
-        </div>
-
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Info */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Asosiy ma'lumotlar</h2>
+          <div className="bg-white rounded-2xl shadow-sm p-6">
+            <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                📝
+              </span>
+              Asosiy ma'lumotlar
+            </h2>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Nomi *
                 </label>
                 <input
                   type="text"
-                  required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                   placeholder="Masalan: Erkaklar futbolkasi"
+                  required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Tavsif
                 </label>
                 <textarea
                   rows={4}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                   placeholder="Mahsulot haqida ma'lumot..."
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Narx (so'm) *
                   </label>
                   <input
                     type="number"
-                    required
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="50000"
+                    required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Kategoriya *
                   </label>
                   <select
-                    required
                     value={formData.categoryId}
                     onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    required
                   >
                     <option value="">Tanlang...</option>
                     {categories?.map((cat: any) => (
@@ -197,22 +207,27 @@ export default function AdminProductForm() {
               </div>
 
               <div>
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={formData.isActive}
                     onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                    className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                    className="w-5 h-5 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
                   />
-                  <span className="text-sm font-medium text-gray-700">Aktiv</span>
+                  <span className="text-sm font-medium text-gray-700">Aktiv (saytda ko'rsatish)</span>
                 </label>
               </div>
             </div>
           </div>
 
           {/* Images */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Rasmlar</h2>
+          <div className="bg-white rounded-2xl shadow-sm p-6">
+            <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+                🖼️
+              </span>
+              Rasmlar
+            </h2>
             <ImageUpload
               onUpload={(urls) => setFormData({ ...formData, images: urls })}
               existingImages={formData.images}
@@ -220,17 +235,22 @@ export default function AdminProductForm() {
           </div>
 
           {/* Sizes */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">O'lchamlar</h2>
+          <div className="bg-white rounded-2xl shadow-sm p-6">
+            <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600">
+                📏
+              </span>
+              O'lchamlar
+            </h2>
             <div className="flex flex-wrap gap-2">
               {availableSizes.map((size) => (
                 <button
                   key={size}
                   type="button"
                   onClick={() => toggleSize(size)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-xl font-medium transition-all ${
                     formData.sizes.includes(size)
-                      ? 'bg-blue-500 text-white'
+                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -241,20 +261,28 @@ export default function AdminProductForm() {
           </div>
 
           {/* Colors */}
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-2xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">Ranglar</h2>
+              <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <span className="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center text-pink-600">
+                  🎨
+                </span>
+                Ranglar
+              </h2>
               <button
                 type="button"
                 onClick={addColor}
-                className="text-blue-500 hover:text-blue-600 text-sm font-medium"
+                className="text-blue-500 hover:text-blue-600 text-sm font-medium flex items-center gap-1"
               >
-                + Rang qo'shish
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Qo'shish
               </button>
             </div>
             <div className="space-y-3">
               {formData.colors.map((color, index) => (
-                <div key={index} className="flex items-center gap-3">
+                <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
                   <input
                     type="color"
                     value={color.hexCode}
@@ -265,13 +293,13 @@ export default function AdminProductForm() {
                     type="text"
                     value={color.name}
                     onChange={(e) => updateColor(index, 'name', e.target.value)}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="Rang nomi (masalan: Qora)"
                   />
                   <button
                     type="button"
                     onClick={() => removeColor(index)}
-                    className="text-red-500 hover:text-red-600 p-2"
+                    className="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors"
                   >
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -279,6 +307,11 @@ export default function AdminProductForm() {
                   </button>
                 </div>
               ))}
+              {formData.colors.length === 0 && (
+                <p className="text-gray-400 text-sm text-center py-4">
+                  Ranglar qo'shilmagan
+                </p>
+              )}
             </div>
           </div>
 
@@ -287,14 +320,14 @@ export default function AdminProductForm() {
             <button
               type="submit"
               disabled={mutation.isPending}
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50"
+              className="flex-1 bg-blue-500 text-white font-medium py-3 rounded-xl hover:bg-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
             >
               {mutation.isPending ? 'Saqlanmoqda...' : 'Saqlash'}
             </button>
             <button
               type="button"
               onClick={() => navigate('/admin/products')}
-              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50"
+              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
             >
               Bekor qilish
             </button>

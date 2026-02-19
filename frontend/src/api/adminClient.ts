@@ -14,7 +14,18 @@ export interface CreateProductData {
 
 export interface UpdateProductData extends Partial<CreateProductData> {}
 
+export interface LoginData {
+  username: string;
+  password: string;
+}
+
 export const adminApi = {
+  // Auth
+  auth: {
+    login: (data: LoginData) =>
+      apiClient.post('/admin/login', data),
+  },
+
   // Products
   products: {
     getAll: (params?: {
