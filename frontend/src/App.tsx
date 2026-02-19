@@ -8,6 +8,10 @@ import HomePage from '@pages/Home';
 import CartPage from '@pages/Cart';
 import ProfilePage from '@pages/Profile';
 
+// Admin Pages
+import AdminLogin from '@pages/admin/AdminLogin';
+import AdminDashboard from '@pages/admin/AdminDashboard';
+
 function App() {
   const { user, isReady } = useTelegram();
   const { setTelegramUser } = useUserStore();
@@ -32,9 +36,14 @@ function App() {
   return (
     <div className="min-h-screen bg-tg-bg text-tg-text">
       <Routes>
+        {/* Client Routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>
     </div>
   );
