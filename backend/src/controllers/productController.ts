@@ -274,6 +274,7 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
       categoryId,
       sizes,
       colors,
+      images,
       isActive = true,
     } = req.body;
 
@@ -293,6 +294,14 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
         price: parseInt(price, 10),
         categoryId: parseInt(categoryId, 10),
         isActive,
+        images: images
+          ? {
+              create: images.map((img: { url: string; order?: number }, index: number) => ({
+                url: img.url,
+                order: img.order ?? index,
+              })),
+            }
+          : undefined,
         sizes: sizes
           ? {
               create: sizes.map((size: string) => ({ size })),
@@ -311,6 +320,7 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
         category: true,
         sizes: true,
         colors: true,
+        images: true,
       },
     });
 
@@ -344,6 +354,8 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
       price,
       categoryId,
       isActive,
+      sizes,
+      colors,
     } = req.body;
 
     const product = await prisma.product.update({
@@ -365,9 +377,39 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
       },
     });
 
+    // Update sizes if provided
+    if (sizes) {
+      await prisma.productSize.deleteMany({ where: { productId: product.id } });
+      await prisma.productSize.createMany({
+        data: sizes.map((size: string) => ({ productId: product.id, size })),
+      });
+    }
+
+    // Update colors if provided
+    if (colors) {
+      await prisma.productColor.deleteMany({ where: { productId: product.id } });
+      await prisma.productColor.createMany({
+        data: colors.map((color: { name: string; hexCode: string }) => ({
+          productId: product.id,
+          name: color.name,
+          hexCode: color.hexCode,
+        })),
+      });
+    }
+
+    const updatedProduct = await prisma.product.findUnique({
+      where: { id: product.id },
+      include: {
+        category: true,
+        sizes: true,
+        colors: true,
+        images: true,
+      },
+    });
+
     res.json({
       success: true,
-      data: product,
+      data: updatedProduct,
       message: 'Product updated successfully',
     });
   } catch (error) {

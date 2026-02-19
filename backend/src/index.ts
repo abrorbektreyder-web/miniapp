@@ -15,6 +15,7 @@ import orderRoutes from '@routes/orderRoutes';
 import commentRoutes from '@routes/commentRoutes';
 import userRoutes from '@routes/userRoutes';
 import dashboardRoutes from '@routes/dashboardRoutes';
+import uploadRoutes from '@routes/uploadRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -82,6 +83,7 @@ app.use('/api', orderRoutes);
 app.use('/api', commentRoutes);
 app.use('/api', userRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
+app.use('/api/admin/upload', uploadRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
