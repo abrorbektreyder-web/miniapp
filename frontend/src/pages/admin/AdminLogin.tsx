@@ -16,7 +16,7 @@ export default function AdminLogin() {
 
     try {
       const response = await adminApi.auth.login({ username, password });
-      
+
       if (response.data.success) {
         localStorage.setItem('admin_token', response.data.data.token);
         navigate('/admin/dashboard');
@@ -64,7 +64,7 @@ export default function AdminLogin() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 bg-white placeholder-gray-400"
                 placeholder="admin"
                 autoComplete="username"
                 required
@@ -80,7 +80,7 @@ export default function AdminLogin() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 bg-white placeholder-gray-400"
                 placeholder="••••••••"
                 autoComplete="current-password"
                 required
