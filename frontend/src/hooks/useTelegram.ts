@@ -30,40 +30,53 @@ export function useTelegram(): UseTelegramReturn {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    // Check if Telegram WebApp is available
-    if (window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp;
+    const initTelegram = () => {
+      if (window.Telegram?.WebApp) {
+        const tg = window.Telegram.WebApp;
 
-      // Set initial values
-      setWebApp(tg);
-      setUser(tg.initDataUnsafe?.user || null);
-      setThemeParams(tg.themeParams || null);
-      setColorScheme(tg.colorScheme || 'light');
-      setPlatform(tg.platform || '');
-
-      // Ready signal
-      tg.ready();
-      setIsReady(true);
-
-      // Expand the app
-      tg.expand();
-
-      // Theme change handler
-      const handleThemeChange = () => {
+        setWebApp(tg);
+        setUser(tg.initDataUnsafe?.user || null);
         setThemeParams(tg.themeParams || null);
         setColorScheme(tg.colorScheme || 'light');
-      };
+        setPlatform(tg.platform || '');
 
-      tg.onEvent('themeChanged', handleThemeChange);
+        tg.ready();
+        setIsReady(true);
+        tg.expand();
 
-      // Cleanup
-      return () => {
-        tg.offEvent('themeChanged', handleThemeChange);
-      };
-    } else {
-      // Not in Telegram, set defaults for development
-      setIsReady(true);
-    }
+        const handleThemeChange = () => {
+          setThemeParams(tg.themeParams || null);
+          setColorScheme(tg.colorScheme || 'light');
+        };
+
+        tg.onEvent('themeChanged', handleThemeChange);
+        return () => {
+          tg.offEvent('themeChanged', handleThemeChange);
+        };
+      }
+      return undefined;
+    };
+
+    // Try immediately
+    const cleanup = initTelegram();
+    if (cleanup || isReady) return cleanup;
+
+    // If SDK not yet loaded, poll very briefly (50ms intervals, max 0.5s)
+    let attempts = 0;
+    const maxAttempts = 10; // 10 * 50ms = 0.5s max wait
+    const timer = setInterval(() => {
+      attempts++;
+      if (window.Telegram?.WebApp) {
+        clearInterval(timer);
+        initTelegram();
+      } else if (attempts >= maxAttempts) {
+        // Not in Telegram — set ready immediately (browser/admin)
+        clearInterval(timer);
+        setIsReady(true);
+      }
+    }, 50);
+
+    return () => clearInterval(timer);
   }, []);
 
   const expand = useCallback(() => {

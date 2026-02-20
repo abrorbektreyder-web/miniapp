@@ -1,26 +1,49 @@
 import { Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { useTelegram } from './hooks/useTelegram';
 import { useUserStore } from './store/userStore';
 
-// Pages
-import HomePage from './pages/Home';
-import CartPage from './pages/Cart';
-import ProfilePage from './pages/Profile';
-import ProductDetail from './pages/ProductDetail/ProductDetail';
+// ⚡ Lazy-loaded Pages — faqat kerakli sahifa yuklanadi
+const HomePage = lazy(() => import('./pages/Home'));
+const CartPage = lazy(() => import('./pages/Cart'));
+const ProfilePage = lazy(() => import('./pages/Profile'));
+const ProductDetail = lazy(() => import('./pages/ProductDetail/ProductDetail'));
 
-// Admin Pages
-import AdminLogin from './pages/admin/AdminLogin';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminProducts from './pages/admin/AdminProducts';
-import AdminProductForm from './pages/admin/AdminProductForm';
-import AdminOrders from './pages/admin/AdminOrders';
-import AdminComments from './pages/admin/AdminComments';
-import AdminCategories from './pages/admin/AdminCategories';
+// ⚡ Admin Pages — oddiy foydalanuvchilar uchun umuman yuklanmaydi
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminProducts = lazy(() => import('./pages/admin/AdminProducts'));
+const AdminProductForm = lazy(() => import('./pages/admin/AdminProductForm'));
+const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'));
+const AdminComments = lazy(() => import('./pages/admin/AdminComments'));
+const AdminCategories = lazy(() => import('./pages/admin/AdminCategories'));
+
+// Minimal inline loading spinner for Suspense
+function PageLoader() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-tg-bg">
+      <div className="w-8 h-8 border-3 border-tg-button border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
+}
+
+// API base URL for prefetch / wake-up ping
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 function App() {
   const { user, isReady } = useTelegram();
   const { setTelegramUser } = useUserStore();
+
+  // ⚡ Backend wake-up: Render free-tier cold start oldini olish
+  useEffect(() => {
+    // Send a lightweight ping to wake backend ASAP
+    fetch(`${API_URL}/categories`, {
+      method: 'GET',
+      priority: 'high' as any,
+    }).catch(() => {
+      // Silently ignore — this is just a wake-up call
+    });
+  }, []);
 
   useEffect(() => {
     if (user && isReady) {
@@ -41,23 +64,25 @@ function App() {
 
   return (
     <div className="min-h-screen bg-tg-bg text-tg-text">
-      <Routes>
-        {/* Client Routes */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/product/:slug" element={<ProductDetail />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          {/* Client Routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/product/:slug" element={<ProductDetail />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
 
-        {/* Admin Routes */}
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/products" element={<AdminProducts />} />
-        <Route path="/admin/products/add" element={<AdminProductForm />} />
-        <Route path="/admin/products/edit/:id" element={<AdminProductForm />} />
-        <Route path="/admin/orders" element={<AdminOrders />} />
-        <Route path="/admin/comments" element={<AdminComments />} />
-        <Route path="/admin/categories" element={<AdminCategories />} />
-      </Routes>
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/products/add" element={<AdminProductForm />} />
+          <Route path="/admin/products/edit/:id" element={<AdminProductForm />} />
+          <Route path="/admin/orders" element={<AdminOrders />} />
+          <Route path="/admin/comments" element={<AdminComments />} />
+          <Route path="/admin/categories" element={<AdminCategories />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 }

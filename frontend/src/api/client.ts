@@ -4,13 +4,18 @@ import type { ApiResponse, ApiError, PaginatedResponse } from '../types/index';
 // API URL from environment
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
-// Create axios instance
+// Create axios instance - optimized for speed
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json',
   },
-  timeout: 10000,
+  timeout: 8000,
+  // ⚡ Allow browser to cache GET responses
+  transitional: {
+    clarifyTimeoutError: true,
+  },
 });
 
 // Request interceptor - Add Telegram initData
@@ -18,7 +23,7 @@ apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // Get Telegram initData
     const initData = window.Telegram?.WebApp?.initData;
-    
+
     if (initData) {
       config.headers['X-Telegram-Init-Data'] = initData;
     }
@@ -86,10 +91,10 @@ export const api = {
       limit?: number;
     }) =>
       apiClient.get<ApiResponse<PaginatedResponse<any>>>('/products', { params }),
-    
+
     getBySlug: (slug: string) =>
       apiClient.get<ApiResponse<any>>(`/products/${slug}`),
-    
+
     getComments: (productId: number, params?: { sortBy?: string; page?: number; limit?: number }) =>
       apiClient.get<ApiResponse<PaginatedResponse<any>>>(`/products/${productId}/comments`, { params }),
   },
@@ -104,10 +109,10 @@ export const api = {
   orders: {
     create: (data: { items: any[]; comment?: string }) =>
       apiClient.post<ApiResponse<any>>('/orders', data),
-    
+
     getAll: () =>
       apiClient.get<ApiResponse<any[]>>('/orders'),
-    
+
     getById: (id: number) =>
       apiClient.get<ApiResponse<any>>(`/orders/${id}`),
   },
@@ -116,10 +121,10 @@ export const api = {
   comments: {
     create: (data: { productId: number; text: string; rating: number }) =>
       apiClient.post<ApiResponse<any>>('/comments', data),
-    
+
     update: (id: number, data: { text?: string; rating?: number }) =>
       apiClient.put<ApiResponse<any>>(`/comments/${id}`, data),
-    
+
     delete: (id: number) =>
       apiClient.delete<ApiResponse<void>>(`/comments/${id}`),
   },

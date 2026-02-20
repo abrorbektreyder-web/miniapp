@@ -1,26 +1,27 @@
 import { QueryClient } from '@tanstack/react-query';
 import { api } from './client';
 
-// Query client configuration
+// Query client configuration - optimized for speed
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // Retry failed requests 3 times
-      retry: 3,
-      // Retry delay (exponential backoff)
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-      // Cache time (5 minutes)
-      staleTime: 5 * 60 * 1000,
-      // GC time (10 minutes)
-      gcTime: 10 * 60 * 1000,
-      // Refetch on window focus
+      // Retry only once for faster failure recovery
+      retry: 1,
+      // Short retry delay
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 5000),
+      // Cache for 2 minutes
+      staleTime: 2 * 60 * 1000,
+      // GC time (5 minutes)
+      gcTime: 5 * 60 * 1000,
+      // Don't refetch on window focus
       refetchOnWindowFocus: false,
       // Refetch on reconnect
       refetchOnReconnect: true,
+      // Network timeout
+      networkMode: 'offlineFirst',
     },
     mutations: {
-      // Retry failed mutations once
-      retry: 1,
+      retry: 0,
     },
   },
 });

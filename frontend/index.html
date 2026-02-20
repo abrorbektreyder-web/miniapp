@@ -1,19 +1,78 @@
 <!doctype html>
 <html lang="uz">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#2481cc" />
-    <meta name="description" content="Kiyim-kechak do'koni - Telegram Mini App" />
-    
-    <!-- Telegram WebApp SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <title>Kiyim Do'koni</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2481cc" />
+  <meta name="description" content="Kiyim-kechak do'koni - Telegram Mini App" />
+
+  <!-- ⚡ Preconnect to critical origins for faster requests -->
+  <link rel="preconnect" href="https://miniapp-540j.onrender.com" crossorigin />
+  <link rel="dns-prefetch" href="https://miniapp-540j.onrender.com" />
+  <link rel="preconnect" href="https://telegram.org" crossorigin />
+  <link rel="dns-prefetch" href="https://telegram.org" />
+
+  <!-- ⚡ Telegram WebApp SDK - async for parallel loading with our JS -->
+  <script src="https://telegram.org/js/telegram-web-app.js" async></script>
+
+  <title>Kiyim Do'koni</title>
+
+  <!-- ⚡ Inline critical CSS for instant loading skeleton -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    #root-loader {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--tg-theme-bg-color, #f5f5f5);
+      font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+    }
+
+    #root-loader .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #e0e0e0;
+      border-top-color: #2481cc;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #root-loader {
+        background: var(--tg-theme-bg-color, #1c1c1d);
+      }
+
+      #root-loader .spinner {
+        border-color: #3a3a3c;
+        border-top-color: #2481cc;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root">
+    <!-- Instant loading skeleton shown before JS loads -->
+    <div id="root-loader">
+      <div class="spinner"></div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
