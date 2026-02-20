@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
-import { optimizeImage, createThumbnail } from '@utils/imageOptimizer';
+import { optimizeImage, createThumbnail } from '../utils/imageOptimizer.js';
 
 /**
  * Upload product images

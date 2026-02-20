@@ -8,14 +8,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // Import routes
-import adminRoutes from '@routes/adminRoutes';
-import categoryRoutes from '@routes/categoryRoutes';
-import productRoutes from '@routes/productRoutes';
-import orderRoutes from '@routes/orderRoutes';
-import commentRoutes from '@routes/commentRoutes';
-import userRoutes from '@routes/userRoutes';
-import dashboardRoutes from '@routes/dashboardRoutes';
-import uploadRoutes from '@routes/uploadRoutes';
+import adminRoutes from './routes/adminRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import productRoutes from './routes/productRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
+import commentRoutes from './routes/commentRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 
 // Load environment variables
 dotenv.config();

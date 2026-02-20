@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as userController from '@controllers/userController';
-import { telegramAuth } from '@middleware/telegramAuth';
+import * as userController from '../controllers/userController.js';
+import { telegramAuth } from '../middleware/telegramAuth.js';
 
 const router = Router();
 

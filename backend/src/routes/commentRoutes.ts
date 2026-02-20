@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import * as commentController from '@controllers/commentController';
-import { telegramAuth } from '@middleware/telegramAuth';
-import { adminAuth } from '@middleware/auth';
+import * as commentController from '../controllers/commentController.js';
+import { telegramAuth } from '../middleware/telegramAuth.js';
+import { adminAuth } from '../middleware/auth.js';
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { uploadMultiple } from '@middleware/upload';
-import { adminAuth } from '@middleware/auth';
-import * as uploadController from '@controllers/uploadController';
+import { uploadMultiple } from '../middleware/upload.js';
+import { adminAuth } from '../middleware/auth.js';
+import * as uploadController from '../controllers/uploadController.js';
 
 const router = Router();
 

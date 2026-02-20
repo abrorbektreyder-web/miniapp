@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import crypto from 'crypto';
-import { validateInitData, parseInitData, getAuthDate, isInitDataExpired } from '@utils/validateTelegramData';
+import { validateInitData, parseInitData, getAuthDate, isInitDataExpired } from '../utils/validateTelegramData.js';
 
 describe('validateTelegramData', () => {
   const botToken = '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11';

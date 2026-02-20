@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { validateInitData, isInitDataExpired } from '@utils/validateTelegramData';
+import { validateInitData, isInitDataExpired } from '../utils/validateTelegramData.js';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();

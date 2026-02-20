@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import * as adminController from '@controllers/adminController';
+import * as adminController from '../controllers/adminController.js';
 import { body } from 'express-validator';
-import { adminAuth } from '@middleware/auth';
+import { adminAuth } from '../middleware/auth.js';
 
 const router = Router();
 

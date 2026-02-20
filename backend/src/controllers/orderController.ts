@@ -13,6 +13,8 @@ const OrderStatus = {
   CANCELLED: 'CANCELLED',
 } as const;
 
+type OrderStatusType = (typeof OrderStatus)[keyof typeof OrderStatus];
+
 /**
  * Create order
  * POST /api/orders
@@ -288,7 +290,7 @@ export const getAllOrdersAdmin = async (req: Request, res: Response): Promise<vo
     const where: any = {};
 
     if (status) {
-      where.status = status as OrderStatus;
+      where.status = status as OrderStatusType;
     }
 
     if (userId) {
@@ -411,7 +413,7 @@ export const updateOrderStatus = async (req: Request, res: Response): Promise<vo
     const { status } = req.body;
 
     const validStatuses = Object.values(OrderStatus);
-    if (!status || !validStatuses.includes(status as string)) {
+    if (!status || !validStatuses.includes(status as OrderStatusType)) {
       res.status(400).json({
         success: false,
         error: {
@@ -424,7 +426,7 @@ export const updateOrderStatus = async (req: Request, res: Response): Promise<vo
 
     const order = await prisma.order.update({
       where: { id: parseInt(id, 10) },
-      data: { status: status as string },
+      data: { status: status as OrderStatusType },
       include: {
         user: true,
         items: {
