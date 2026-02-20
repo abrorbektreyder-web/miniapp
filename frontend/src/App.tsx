@@ -14,6 +14,9 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminProductForm from './pages/admin/AdminProductForm';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminComments from './pages/admin/AdminComments';
+import AdminCategories from './pages/admin/AdminCategories';
 
 function App() {
   const { user, isReady } = useTelegram();
@@ -44,13 +47,16 @@ function App() {
         <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        
+
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/products" element={<AdminProducts />} />
         <Route path="/admin/products/add" element={<AdminProductForm />} />
         <Route path="/admin/products/edit/:id" element={<AdminProductForm />} />
+        <Route path="/admin/orders" element={<AdminOrders />} />
+        <Route path="/admin/comments" element={<AdminComments />} />
+        <Route path="/admin/categories" element={<AdminCategories />} />
       </Routes>
     </div>
   );
